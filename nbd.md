@@ -77,6 +77,10 @@ p2_id(Integer) - идентификатор второго узла
 ### road_section
 id(Integer) - идентификатор участка дороги
 
+lat(Float) - широта начальной точки
+
+lon(Float) - широта конечной точки
+
 ### road_section_node
 section_id(Integer) - идентификатор участка дороги
 
@@ -92,13 +96,17 @@ plan_id - идентификатор плана
 
 section_id - идентификатор участка дороги
 
+## Модель данных
+
+
+
 ## Размер данных
 
 Vpoint = Vid + Vlon + Vlat + Vstreet = 8B + 4B + 4B + 32B = 48B
 
 Vrelations = Vp1_id + Vp2_id = 8B + 8B = 16B
 
-Vroad_section = Vid = 8B
+Vroad_section = Vid + Мlat + Vlon = 8B + 4B + 4B = 16B
 
 Vroad_section_node = (~3) * (Vsection_id + Vpoint_id) = 3 * (8B + 8B) = 48B
 
@@ -106,12 +114,12 @@ Vplan = Vid + Vname = 8B + 16B = 24B
 
 Vplan_road = Vplan_id + (~3) * Vsection_id = 8B + 3 * 8B = 32B
 
-V1(Объем данных плановых работ) = Vroad_section + Vroad_section_node + Vplan + Vplan_road = 8B + 48B + 24B + 32B = 112B
+V1(Объем данных плановых работ) = Vroad_section + Vroad_section_node + Vplan + Vplan_road = 16B + 48B + 24B + 32B = 120B
 
 V2(Обхем данных хранимых узлов и отношений) = Vpoint + (~3) * Vrelations = 48B + 3 * 16B = 96B
 
-V = V1 + V2 = 112B + 96B = 208B
+V = V1 + V2 = 120B + 96B = 216B
 
-Vp(N) = N * V1 = N * 112B - объем памяти для плановых работ, где N - количество планов ремонтных работ
+Vp(N) = N * V1 = N * 120B - объем памяти для плановых работ, где N - количество планов ремонтных работ
 
 Vg(N) = N * V2 = N * 96B - обхем памяти хранимых узлов и отношений, где N - количество хранимых узлов
