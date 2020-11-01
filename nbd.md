@@ -70,6 +70,10 @@ lon(Float) - долгота точки
 
 street(String) - название улицы
 
+### relations
+p1_id(Integer) - идентификатор первого узла
+p2_id(Integer) - идентификатор второго узла
+
 ### road_section
 id(Integer) - идентификатор участка дороги
 
@@ -92,12 +96,22 @@ section_id - идентификатор участка дороги
 
 Vpoint = Vid + Vlon + Vlat + Vstreet = 8B + 4B + 4B + 32B = 48B
 
+Vrelations = Vp1_id + Vp2_id = 8B + 8B = 16B
+
 Vroad_section = Vid = 8B
 
-Vroad_section_node = Vsection_id + Vpoint_id = 8B + 8B = 16B
+Vroad_section_node = (~3) * (Vsection_id + Vpoint_id) = 3 * (8B + 8B) = 48B
 
 Vplan = Vid + Vname = 8B + 16B = 24B
 
-Vplan_road = Vplan_id + Vsection_id = 8B + 8B = 16B
+Vplan_road = Vplan_id + (~3) * Vsection_id = 8B + 3 * 8B = 32B
 
-V = 
+V1(Объем данных плановых работ) = Vroad_section + Vroad_section_node + Vplan + Vplan_road = 8B + 48B + 24B + 32B = 112B
+
+V2(Обхем данных хранимых узлов и отношений) = Vpoint + (~3) * Vrelations = 48B + 3 * 16B = 96B
+
+V = V1 + V2 = 112B + 96B = 208B
+
+Vp(N) = N * V1 = N * 112B - объем памяти для плановых работ, где N - количество планов ремонтных работ
+
+Vg(N) = N * V2 = N * 96B - обхем памяти хранимых узлов и отношений, где N - количество хранимых узлов
